@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=B612&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Muli&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open%20Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro);
+
+body {
+    background: linear-gradient(90deg, rgba(22,0,96,1) 0%, rgba(69,3,187,1) 53%, rgba(76,0,255,1) 100%);
+}
+
+.transition {
+    transition: all .2s ease-in-out; 
+}
+
+#name {
+    font-size: 100px
+}
+
+#name:hover {
+    font-size: 105px;
+}
+
+#tagline {
+    font-size: 70px
+}
+
+#tagline:hover {
+    font-size: 75px;
+}
+
+#eye:hover {
+    width: 110px;
+    height: 110px;
+}
+
+.anchor {
+    display: block;
+    padding-top: 65px;
+    margin-top: -65px;
+}
+
+  #lid {
+    animation: blink 2.4s infinite;
+  }
+  #eye {
+    animation: squeeze 2.4s infinite;
+  }
+  
+  @keyframes blink {
+    90% {
+      transform: none;
+      animation-timing-function: ease-in;
+    }
+    93% {
+      transform: translateY(15px) scaleY(0)
+    }
+    100% {
+      animation-timing-function: ease-out;
+    }
+  }
+  @keyframes squeeze {
+    90% {
+      transform: none;
+      animation-timing-function: ease-in;
+    }
+    93% {
+      transform: translateY(3px) scaleY(0.8)
+    }
+    100% {
+      animation-timing-function: ease-out;
+    }
+  }
