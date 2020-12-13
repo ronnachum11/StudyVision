@@ -6,7 +6,7 @@ from application.classes.user import User
 from application.classes.session import Session
 from application.forms.forms import RegistrationForm, LoginForm
 
-from utils import get_blink_rate, get_blink_ratio, current_blink_rate, calc_focus_values, update_focus_value, update_focus_plots, get_mood, get_overall_mood, plot_moods
+from utils import plot_overall_mood, blink_rate_graph, get_blink_rate, get_blink_ratio, current_blink_rate, calc_focus_values, update_focus_value, update_focus_plots, get_mood, get_overall_mood, plot_moods
 from io import BytesIO 
 from io import StringIO
 from PIL import Image
@@ -39,7 +39,7 @@ def start_session():
 @app.route("/end-session/<string:session_id>")
 def end_session(session_id):
     current_session = current_user.get_session_by_id(session_id)
-    current_user.update_session(session_id, {"end_time": time.time(), "total_time": time.time() - session.start_time})
+    current_user.update_session(session_id, {"end_time": time.time(), "total_time": time.time() - current_session.start_time})
 
     return render_template("end_session.html")
 
@@ -49,6 +49,14 @@ def session():
     # current_user.add_session(current_session)
     current_session = current_user.get_session_by_id('5fd63ac9921dc84394b08bda')
     return render_template("session.html", session_id=current_session.id)
+
+@login_required
+@app.route("/account")
+def account():
+    user = current_user
+    sessions = current_user.sessions
+    info = [[session.start_time.strftime('%I:%M')] for session in sessions]
+    return render_template("account.html", user=user, sessions=sessions, info=info)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -173,11 +181,23 @@ def focus_heat(session_id):
     _, heat = update_focus_plots(session.focus, session.ratios)
     return heat
 
+@app.route("/mood-line/<string:session_id>")
+def mood_line(session_id):
+    session = current_user.get_session_by_id(session_id)
+    line = plot_overall_mood(session.mood)
+    return line
+
 @app.route("/mood-pie/<string:session_id>")
 def mood_pie(session_id):
     session = current_user.get_session_by_id(session_id)
-    pie= plot_moods(session.mood)
+    pie = plot_moods(session.mood)
     return pie
+
+@app.route("/strain-line/<string:session_id>")
+def strain_line(session_id):
+    session = current_user.get_session_by_id(session_id)
+    line = blink_rate_graph(session.blink_rate, 25)
+    return line
 
 @app.route("/logout")
 @login_required

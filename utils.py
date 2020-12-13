@@ -153,6 +153,21 @@ def shouldNotifty(emotions):
         return True
     return False
 
+def blink_rate_graph(historic_blink_rate, time_per_batch):
+    print(len(historic_blink_rate))
+    final_time = len(historic_blink_rate) * time_per_batch/60
+    time_arr = np.arange(0, final_time, time_per_batch/60)
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.set_title('Blink Rate')
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Blink Rate (blinks per second)')
+    ax.plot(time_arr, historic_blink_rate, color='purple', label='Your Blink Rate')
+    ax.axhline(y=1/6, color='black', linestyle=':', label='Average Blink Rate')
+    ax.legend(loc="best")
+    graph = mpld3.fig_to_html(fig)
+    plt.savefig('foo.png', bbox_inches='tight')
+    return graph
+
 def plot_moods(mood):
     labels = [emotion.capitalize() for emotion in mood]
     sizes = [mood[emotion] for emotion in mood]
@@ -163,3 +178,21 @@ def plot_moods(mood):
 
     piechart = mpld3.fig_to_html(fig1)
     return piechart
+
+def plot_overall_mood(moods):
+    fig = plt.figure()
+
+    x = np.array([i for i in range(len(moods))])
+    
+    mood_dict = {emotion:np.array([moods[i][emotion] for i in range(len(moods))]) for emotion in moods[0]} # make sure len is at least 1
+    
+    for emotion in mood_dict:
+        plt.plot(x, mood_dict[emotion], label=emotion.capitalize())
+
+    plt.legend(loc="upper right")
+    plt.xlabel('Time')
+    plt.ylabel('Strength of Emotion')
+    plt.title('Emotion Breakdown Throughout Study Session')
+
+    linechart = mpld3.fig_to_html(fig)
+    return linechart
