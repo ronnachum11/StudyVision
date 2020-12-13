@@ -36,8 +36,8 @@
 </head>
 
 <body>
-    <header class="site-header" style="padding-bottom: 10px">
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: transparent; margin: 10px">
+    <header class="site-header" style="padding-bottom: 10px; padding-top: -100px">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background: linear-gradient(90deg, rgba(22,0,96,1) 0%, rgba(69,3,187,1) 53%, rgba(76,0,255,1) 100%); margin: 10px">
             <a id="logo_title" class="navbar-brand" href="{{ url_for('home', _anchor='home') }}">
                 <!-- <img src=""> -->
                 StudyVision
@@ -50,12 +50,10 @@
                 {% if not current_user.is_authenticated %}
                     <div class="navbar-nav">
                         <a class="nav-item nav-link" href="{{ url_for('home', _anchor='about') }}">About</a>
-                        <a class="nav-item nav-link" href="{{ url_for('home', _anchor='contact') }}">Contact</a>
                     </div>
                 {% else %}
                     <div class="navbar-nav">
                         <a class="nav-item nav-link" href="{{ url_for('home', _anchor='about') }}">About</a>
-                        <a class="nav-item nav-link" href="{{ url_for('home', _anchor='contact') }}">Contact</a>
                         <a class="nav-item nav-link" href="{{ url_for('start_session') }}">Start a Session</a>
                     </div>
                 {% endif %}

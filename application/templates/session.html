@@ -12,31 +12,21 @@
         };
     </script>
 
-    <script>
-        function update_assignments(course, value) {
-            console.log(course + " " + value)
-            $("#assignments-updated").load("/get_assignments/" + course + "/" + value);
-        }
-    </script>
-
     <h1>Your Study Session</h1>
-    <div class="blob"></div>
-
-    <a href="{{ url_for('end_session', session_id=session_id) }}" class="btn btn-red btn-wide" style="margin-top: 30px">End Session</a>
 
     <div id="main-div">
         <div class = "row">
             <div class="col-md-6">
                 <div class="content-div">
                     <h1>Focus</h1>
-                    <div id="linegraph"></div>
-                    <div id="heatmap"></div>
+                    <div id="focus-line"></div>
+                    <div id="focus-heat"></div>
                 </div>                  
             </div>
             <div class = "col-md-6">
                 <div class="content-div">
                     <h1>Eye Strain</h1>
-                    <div id=linegraph"></div>
+                    <div id=strain-line"></div>
                 </div>
             </div>
         </div>
@@ -49,11 +39,16 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="display: flex; flex-direction: row; align-items: center; justify-content: center">
+        <div class="row">
+            <a href="{{ url_for('end_session', session_id=session_id) }}" class="btn btn-red btn-wide" style="margin-top: 30px">End Session</a>
+        </div>
+        <div class="row" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center">
             <video id="video" autoplay></video>
             <canvas id="canvas" ></canvas>
         </div>
     </div>
+
+
     <script>    
         var video = document.getElementById('video');
         if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -97,8 +92,17 @@
             request.send();
             console.log("MOOD");
         }
+
+        function update_graphs() {
+            $("#focus-line").load("/focus-line/{{ session_id }}");
+            $("#focus-heat").load("/focus-heat/{{ session_id }}");
+            $("#strain-line").load("/strain-line/{{ session_id }}");
+            $("#mood-pie").load("/mood-pie/{{ session_id }}");
+            $("#mood-line").load("/mood-line/{{ session_id }}");
+        }
         
         console.log("HERE");
+        window.setInterval(update_graphs, 60000)
         // window.setInterval(focus_request, 2500);
         // window.setInterval(strain_request, 1500);
         // window.setInterval(mood_request, 20000);

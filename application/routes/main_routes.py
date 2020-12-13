@@ -45,8 +45,9 @@ def end_session(session_id):
 
 @app.route("/session", methods=["GET", "POST"])
 def session():
-    current_session = Session(id=str(ObjectId()), start_time=datetime.now())
-    current_user.add_session(current_session)
+    # current_session = Session(id=str(ObjectId()), start_time=datetime.now())
+    # current_user.add_session(current_session)
+    current_session = current_user.get_session_by_id('5fd63ac9921dc84394b08bda')
     return render_template("session.html", session_id=current_session.id)
 
 @app.route("/register", methods=["GET", "POST"])
@@ -159,6 +160,24 @@ def mood():
 
     print("HERE")
     return "hi"
+
+@app.route("/focus-line/<string:session_id>")
+def focus_line(session_id):
+    session = current_user.get_session_by_id(session_id)
+    line, _ = update_focus_plots(session.focus, session.ratios)
+    return line
+
+@app.route("/focus-heat/<string:session_id>")
+def focus_heat(session_id):
+    session = current_user.get_session_by_id(session_id)
+    _, heat = update_focus_plots(session.focus, session.ratios)
+    return heat
+
+@app.route("/mood-pie/<string:session_id>")
+def mood_pie(session_id):
+    session = current_user.get_session_by_id(session_id)
+    pie= plot_moods(session.mood)
+    return pie
 
 @app.route("/logout")
 @login_required
