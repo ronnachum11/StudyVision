@@ -1,5 +1,5 @@
 import cv2
-import dlib
+# import dlib
 import math
 import datetime
 import numpy as np
@@ -34,27 +34,28 @@ def get_blink_ratio(eye_points, facial_landmarks):
     return ratio
 
 def get_blink_rate(frame, time, blink_ratio_threshold, historic_blinks):
-    detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
-    left_eye_landmarks  = [36, 37, 38, 39, 40, 41]
-    right_eye_landmarks = [42, 43, 44, 45, 46, 47]
-    blinks = 0
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    scale_percent = 60 # percent of original size
-    width = int(frame.shape[1] * 40 / 100)
-    height = int(frame.shape[0] * 40 / 100)
-    dim = (width, height)
-    frame = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
-    faces, scores, _ = detector.run(image = frame, upsample_num_times = 0, adjust_threshold = 0.0)
-    face = faces[scores.index(max(scores))]
-    landmarks = predictor(frame, face)
-    left_eye_ratio  = get_blink_ratio(left_eye_landmarks, landmarks)
-    right_eye_ratio = get_blink_ratio(right_eye_landmarks, landmarks)
-    blink_ratio = (left_eye_ratio + right_eye_ratio) / 2
-    if blink_ratio > blink_ratio_threshold:
-        historic_blinks.append(1)
-    else:
-        historic_blinks.append(0)
+    # detector = dlib.get_frontal_face_detector()
+    # predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+    # left_eye_landmarks  = [36, 37, 38, 39, 40, 41]
+    # right_eye_landmarks = [42, 43, 44, 45, 46, 47]
+    # blinks = 0
+    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # scale_percent = 60 # percent of original size
+    # width = int(frame.shape[1] * 40 / 100)
+    # height = int(frame.shape[0] * 40 / 100)
+    # dim = (width, height)
+    # frame = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
+    # faces, scores, _ = detector.run(image = frame, upsample_num_times = 0, adjust_threshold = 0.0)
+    # face = faces[scores.index(max(scores))]
+    # landmarks = predictor(frame, face)
+    # left_eye_ratio  = get_blink_ratio(left_eye_landmarks, landmarks)
+    # right_eye_ratio = get_blink_ratio(right_eye_landmarks, landmarks)
+    # blink_ratio = (left_eye_ratio + right_eye_ratio) / 2
+    # if blink_ratio > blink_ratio_threshold:
+    #     historic_blinks.append(1)
+    # else:
+    #     historic_blinks.append(0)
+    hisotric_blinks.append(1)
     return historic_blinks
 
 def current_blink_rate(historic_blinks, freq, time):
