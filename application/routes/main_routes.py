@@ -59,6 +59,24 @@ def login():
     
     return render_template("login.html", form=form)
 
+@app.route("/focus")
+def focus():
+    img_64 = request.args.get("img")
+    print("HERE")
+    return "hi"
+
+@app.route("/strain")
+def strain():
+    img_64 = request.args.get("img")
+    print("HERE")
+    return "hi"
+
+@app.route("/mood")
+def mood():
+    img_64 = request.args.get("img")
+    print("HERE")
+    return "hi"
+
 @app.route("/logout")
 @login_required
 def logout():

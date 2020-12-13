@@ -7,11 +7,9 @@
 
 {% block content %}
     <h1>Start a Session</h1>
-        <div class="row" style="padding-right: 10%; padding-left: 10%">
-            <video id="video" width="640" height="480" autoplay></video>
-            <button id="snap">Snap Photo</button>
-            <canvas id="canvas" width="640" height="480"></canvas>
-        </div>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+
     <script>    
         var video = document.getElementById('video');
         if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -26,12 +24,31 @@
         var context = canvas.getContext('2d');
         var video = document.getElementById('video');
     
-        // Trigger photo take
-        document.getElementById("snap").addEventListener("click", function() {
-            context.drawImage(video, 0, 0, 640, 480);
-        var request = new XMLHttpRequest();
-        request.open('POST', '/submit?image=' + video.toString('base64'), true);
-        request.send();
-        });
+        function focus_request() {
+            var request = new XMLHttpRequest();
+            request.open('GET', '/focus?img=' + canvas.toDataURL(video).replace("data:image/png;base64,", ""), true);
+            request.send();
+            console.log("FOCUS");
+        }
+    
+        function strain_request() {
+            var request = new XMLHttpRequest();
+            request.open('GET', '/strain?img=' + canvas.toDataURL(video).replace("data:image/png;base64,", ""), true);
+            request.send();
+            console.log("STRAIN");
+        }
+        
+        function mood_request() {
+            var request = new XMLHttpRequest();
+            request.open('GET', '/mood?img=' + canvas.toDataURL(video).replace("data:image/png;base64,", ""), true);
+            request.send();
+            console.log("MOOD");
+        }
+        
+        console.log("HERE");
+        window.setInterval(focus_request, 2500);
+        window.setInterval(strain_request, 1500);
+        window.setInterval(mood_request, 20000);
+    
     </script>
 {% endblock content %}
