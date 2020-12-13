@@ -45,10 +45,16 @@ def end_session(session_id):
 
 @app.route("/session", methods=["GET", "POST"])
 def session():
-    # current_session = Session(id=str(ObjectId()), start_time=datetime.now())
-    # current_user.add_session(current_session)
-    current_session = current_user.get_session_by_id('5fd63ac9921dc84394b08bda')
-    return render_template("session.html", session_id=current_session.id)
+    if current_user.id == "5fd5651341432c9630f95c8e":
+        current_session = current_user.get_session_by_id('5fd63ac9921dc84394b08bda')
+        session_id = current_session.id
+        header = ""
+    else:
+        current_session = Session(id=str(ObjectId()), start_time=datetime.now())
+        current_user.add_session(current_session)
+        session_id = current_session.id
+        header = "Currently Unavaialable for Standard Users, Sample Data Displayed"
+    return render_template("session.html", session_id=session_id, header=header)
 
 @login_required
 @app.route("/account")
