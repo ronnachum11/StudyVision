@@ -38,8 +38,8 @@ def start_session():
 
 @app.route("/end-session/<string:session_id>")
 def end_session(session_id):
-    current_session = current_user.get_session_by_id(session_id)
-    current_user.update_session(session_id, end_time=datetime.now, total_time=datetime.now() - current_session.start_time)
+    # current_session = current_user.get_session_by_id(session_id)
+    # current_user.update_session(session_id, end_time=datetime.now, total_time=datetime.now() - current_session.start_time)
 
     return render_template("end_session.html")
 
@@ -53,7 +53,7 @@ def session():
         current_session = Session(id=str(ObjectId()), start_time=datetime.now())
         current_user.add_session(current_session)
         session_id = current_session.id
-        header = "Currently Unavaialable for Standard Users, Sample Data Displayed"
+        header = "Currently Unavailable for Standard Users, Sample Data Displayed"
     return render_template("session.html", session_id=session_id, header=header)
 
 @login_required
