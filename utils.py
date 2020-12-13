@@ -3,7 +3,7 @@ import dlib
 import math
 import datetime
 import numpy as np
-from gaze_tracking import GazeTracking
+# from gaze_tracking import GazeTracking
 import matplotlib.pyplot as plt
 import seaborn as sns
 import mpld3
@@ -62,9 +62,10 @@ def current_blink_rate(historic_blinks, freq, time):
 
 def calc_focus_values(im, scores, ratios):
     mem_size = 100 # can change this number
-    gaze = GazeTracking() # have this in _init_ so you don't recall it so often
-    gaze.refresh(im)
-    hratio, vratio = gaze.horizontal_ratio(), gaze.vertical_ratio()
+    # gaze = GazeTracking() # have this in _init_ so you don't recall it so often
+    # gaze.refresh(im)
+    # hratio, vratio = gaze.horizontal_ratio(), gaze.vertical_ratio()
+    hratio, v_ratio = 0.1, 0.1
     score = 0
     ratio = (None,None)
     if len(scores): score = scores[-1]
