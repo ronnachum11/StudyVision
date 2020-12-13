@@ -12,33 +12,47 @@
         };
     </script>
 
-    <h1>Your Study Session</h1>
-
+    <h1 style="margin-bottom: -25px">Your Study Session</h1>
     <div id="main-div">
         <div class = "row">
             <div class="col-md-6">
                 <div class="content-div">
-                    <h1>Focus</h1>
-                    <div id="focus-line"></div>
-                    <div id="focus-heat"></div>
+                    <h1>Focus - Level Over Time + Heatmap</h1>
+                    <div class="graphs">
+                        <!-- <div id="focus-line" class="graph"></div>
+                        <div id="focus-heat" class="graph"></div>     -->
+                        <img src="{{ url_for('static', filename='images/focus_line.png') }}" class="graph-img">
+                        <img src="{{ url_for('static', filename='images/heatmap.png') }}" class="graph-img" style="margin-left: 30px">
+                    </div>
+                    <h3>Average Focus: 7.53/10</h3>
                 </div>                  
             </div>
             <div class = "col-md-6">
                 <div class="content-div">
-                    <h1>Eye Strain</h1>
-                    <div id=strain-line"></div>
+                    <h1>Eye Strain - Blink Rate Over Time</h1>
+                    <div class="graphs" class="graph">
+                        <!-- <div id=strain-line" class="graph"></div> -->
+                        <img src="{{ url_for('static', filename='images/blink_rate.png') }}" class="graph-img">
+                    </div>
+                    <h3>Eye Strain: Normal - Slightly Elevated</h3>
                 </div>
             </div>
         </div>
         <div class = "row">
             <div class="col-md-12">
                 <div class="content-div">
-                    <h1>Mood</h1>
-                    <div id="mood-pie"></div>
-                    <div id="mood-line"></div>
+                    <h1>Mood - Emotional Breakdown Over Time + Current</h1>
+                    <div class="graphs">
+                        <!-- <div id="mood-pie" class="graph"></div>
+                        <div id="mood-line" class="graph"></div> -->
+                        <img src="{{ url_for('static', filename='images/moods_line.png') }}" class="graph-img">
+                        <img src="{{ url_for('static', filename='images/moods_pie.png') }}" class="graph-img" style="margin-left: 30px">
+                    </div>
+                    <h3>Mood: Neutral (69.0%), Sad (15.0%)</h3>
                 </div>
             </div>
         </div>
+        <h5>Graphs Last Updated: 37s ago</h5>
         <div class="row">
             <a href="{{ url_for('end_session', session_id=session_id) }}" class="btn btn-red btn-wide" style="margin-top: 30px">End Session</a>
         </div>
@@ -64,15 +78,19 @@
         var video = document.getElementById('video');
 
         function focus_request() {
-            $.ajax({
-                type: "POST",
-                url: "/focus", //I have doubt about this url, not sure if something specific must come before "/take_pic"
-                data: { 
-                    imageBase64: canvas.toDataURL(video)
-                }
-            }).done(function() {
-                console.log("FOCUS");
-            });
+            context.drawImage(video, 0, 0, 200, 200)
+            canvas.toBlob() = (blob) => {
+                const img = new Image();
+                $.ajax({
+                    type: "POST",
+                    url: "/focus", //I have doubt about this url, not sure if something specific must come before "/take_pic"
+                    data: { 
+                            image: window.URL.createObjectUrl(blob)
+                        }
+                    }).done(function() {
+                        console.log("FOCUS");
+                });
+            }
             // var request = new XMLHttpRequest();
             // request.open('GET', '/focus?id={{ session_id }}&img=' + canvas.toDataURL(video).replace("data:image/png;base64,", ""), true);
             // request.send();
@@ -102,8 +120,8 @@
         }
         
         console.log("HERE");
-        update_graphs()
-        // window.setInterval(update_graphs, 60000)
+        // update_graphs()
+        // window.setInterval(update_graphs, 2000)
         // window.setInterval(focus_request, 2500);
         // window.setInterval(strain_request, 1500);
         // window.setInterval(mood_request, 20000);

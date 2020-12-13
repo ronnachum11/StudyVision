@@ -39,7 +39,7 @@ def start_session():
 @app.route("/end-session/<string:session_id>")
 def end_session(session_id):
     current_session = current_user.get_session_by_id(session_id)
-    current_user.update_session(session_id, {"end_time": time.time(), "total_time": time.time() - current_session.start_time})
+    current_user.update_session(session_id, end_time=datetime.now, total_time=datetime.now() - current_session.start_time)
 
     return render_template("end_session.html")
 
@@ -94,7 +94,7 @@ def login():
 
 @app.route("/focus", methods=["GET", "POST"])
 def focus():
-    data_url = request.values['imageBase64']
+    data_url = request.values['image']
     img_64 = data_url.replace("data:image/png;base64,", "")
     png_as_np = np.frombuffer(base64.b64decode(img_64), dtype=np.uint8)
     print(png_as_np.shape)
@@ -190,7 +190,7 @@ def mood_line(session_id):
 @app.route("/mood-pie/<string:session_id>")
 def mood_pie(session_id):
     session = current_user.get_session_by_id(session_id)
-    pie = plot_moods(session.mood)
+    pie = plot_moods(session.mood[-1])
     return pie
 
 @app.route("/strain-line/<string:session_id>")
