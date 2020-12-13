@@ -1,4 +1,5 @@
 dnspython==2.0.0
+email-validator==1.1.2
 Flask==1.1.2
 Flask-Bcrypt==0.7.1
 Flask-Bootstrap==3.3.7.1
