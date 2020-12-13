@@ -10,6 +10,10 @@ from dotenv import load_dotenv
 from application.classes.db import DB
 from config import load_config
 
+# import logging
+# log = logging.getLogger('werkzeug')
+# log.setLevel(logging.ERROR)
+
 config = load_config()
 
 app = Flask(__name__)   

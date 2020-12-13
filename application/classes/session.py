@@ -5,7 +5,7 @@ from application import db
 
 
 class Session:
-    def __init__(self, id:str, start_time=None, end_time=None, total_time=None, focus:list=None, ratios:list=None, heatmap:list=None, mood:list=None, overall_mood:str=None, blinks:list=None, blink_rate:list=None):
+    def __init__(self, id:str, start_time=None, end_time=None, total_time=None, focus:list=[], ratios:list=[], heatmap:list=[], mood:list=[], overall_mood:str="None", blinks:list=[], blink_rate:list=[]):
         self.id = str(id)
         self.start_time = start_time
         self.end_time = end_time

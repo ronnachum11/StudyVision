@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import mpld3
 import time
+# from fer import FER
 
 BLINK_RATIO_THRESHOLD = 7
 
@@ -39,8 +40,8 @@ def get_blink_rate(frame, time, blink_ratio_threshold, historic_blinks):
     blinks = 0
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     scale_percent = 60 # percent of original size
-    width = int(frame.shape[1] * 20 / 100)
-    height = int(frame.shape[0] * 20 / 100)
+    width = int(frame.shape[1] * 40 / 100)
+    height = int(frame.shape[0] * 40 / 100)
     dim = (width, height)
     frame = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
     faces, scores, _ = detector.run(image = frame, upsample_num_times = 0, adjust_threshold = 0.0)
@@ -56,32 +57,109 @@ def get_blink_rate(frame, time, blink_ratio_threshold, historic_blinks):
     return historic_blinks
 
 def current_blink_rate(historic_blinks, freq, time):
-    return str(sum(historic_blinks[-freq:])/time)
+    return sum(historic_blinks[-freq:])/time
 
-def focus_method(im, scores, ratios, heatmap):
+def calc_focus_values(im, scores, ratios):
     mem_size = 100 # can change this number
     gaze = GazeTracking() # have this in _init_ so you don't recall it so often
     gaze.refresh(im)
     hratio, vratio = gaze.horizontal_ratio(), gaze.vertical_ratio()
-    score = scores[-1]
+    score = 0
     ratio = (None,None)
+    if len(scores): score = scores[-1]
     if len(scores) >= mem_size: score-=scores[-1*mem_size]
     if hratio is not None:
         xp = 2*(0.5-hratio)
         yp = 2*(0.75-vratio)
         score+=(xp*xp)+(yp*yp)
         ratio = (xp,yp)
-        if len(scores) % mem_size == 0:
-            fig, ax = plt.subplots(figsize=(7, 7))
-            ax.set_xlim([-1, 1])
-            ax.set_ylim([-1, 1])
-            ax.set_title('Areas of Focus') # change title
-            temp_data = ratios[1-mem_size:] + [ratio]
-            data = list(zip(*temp_data))
-            sns.kdeplot(data[0],data[1], shade=True,color='tab:purple') # change color
-            heatmap = mpld3.fig_to_html(fig)
     else: score = None
-    return score, ratio, heatmap
+    return score, ratio
 
-def get_focus_value(scores):
-    return 10-max(0.0,min(0.5,scores[-1]/min(100,len(scores))))*20 # change 100 if mem_size changes
+def update_focus_value(score,size_scores): 
+    return 10-max(0.0,min(0.5,score/min(100,size_scores)))*20 # change 100 if mem_size changes, size_scores = len(scores) (after appending scores to it)
+
+def update_focus_plots(scores,ratios):
+    mem_size = 100 # can change this number
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.set_xlim([-1, 1])
+    ax.set_ylim([-1, 1])
+    ax.set_title('Areas of Focus') # change title
+    temp_data = ratios[-1*mem_size:] + [(0.001,0.002)]
+    data = list(zip(*temp_data))
+    sns.kdeplot(data[0],data[1], shade=True,color='tab:purple') # change color
+    heatmap = mpld3.fig_to_html(fig)
+    temp_scores = np.array(scores[-1*mem_size:])
+    temp_scores[temp_scores<0.0] = 0.0
+    temp_scores[temp_scores>0.5] = 0.5
+    if len(scores) >= 2*mem_size:
+        for i in range(mem_size):
+            temp_scores[i] = 10-(temp_scores[i]/mem_size)*20
+    elif len(scores) >= mem_size:
+        for i in range(mem_size):
+            temp_scores[i] = 10-(temp_scores[i]/min(mem_size,i+1+len(scores)-mem_size))*20
+    else:
+        for i in range(len(scores)):
+            temp_scores[i] = 10-(temp_scores[i]/(i+1))*20
+    fig2, ax2 = plt.subplots(figsize=(7, 7))
+    ax2.set_title('Focus Over Time') # change title
+    plt.plot(temp_scores)
+    focus_plot = mpld3.fig_to_html(fig2)
+    return focus_plot, heatmap
+
+def update_overall_focus_plots(scores,ratios):
+    mem_size = 100
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.set_xlim([-1, 1])
+    ax.set_ylim([-1, 1])
+    ax.set_title('Areas of Focus') # change title
+    temp_data = ratios[:] + [(0.001,0.002)]
+    data = list(zip(*temp_data))
+    sns.kdeplot(data[0],data[1], shade=True,color='tab:purple') # change color
+    heatmap = mpld3.fig_to_html(fig)
+    temp_scores = np.array(scores)
+    temp_scores[temp_scores<0.0] = 0.0
+    temp_scores[temp_scores>0.5] = 0.5
+    for i in range(len(scores)):
+        temp_scores[i] = 10-(temp_scores[i]/min(mem_size,i+1))*20
+    fig2, ax2 = plt.subplots(figsize=(7, 7))
+    ax2.set_title('Focus Over Time') # change title
+    plt.plot(temp_scores)
+    focus_plot = mpld3.fig_to_html(fig2)
+    return focus_plot, heatmap
+
+def get_overall_mood(moods):
+    emotions = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
+    overallMood = {emotion:0 for emotion in emotions}
+    for mood in moods:
+        for emotion in overallMood:
+            overallMood[emotion] += mood[emotion]
+    if len(moods):
+        overallMood = {emotion:round(overallMood[emotion]/len(moods)) for emotion in overallMood}
+    return overallMood
+
+def get_mood(img):
+    mood = detect_emotions(img)
+    return mood
+
+def detect_emotions(img):
+    detector = FER()
+    result = detector.detect_emotions(img)
+    emotion = {emotion:round(result[0]['emotions'][emotion] * 100) for emotion in result[0]['emotions']}
+    return emotion
+
+def shouldNotifty(emotions):
+    if emotions['angry'] + emotions['disgust'] + emotions['fear'] + emotions['sad'] > 80:
+        return True
+    return False
+
+def plot_moods(mood):
+    labels = [emotion.capitalize() for emotion in mood]
+    sizes = [mood[emotion] for emotion in mood]
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, labels = labels,  autopct='%1.1f%%', shadow=True, startangle=90)
+    ax1.axis('equal')
+
+    piechart = mpld3.fig_to_html(fig1)
+    return piechart

@@ -47,7 +47,7 @@ class User(UserMixin):
                     dictionary.get("email"),
                     dictionary.get("password"),
                     dictionary.get("_is_active"),
-                    [Session.get(session) for session in dictionary.get('sessions')]
+                    [Session.from_dict(session) for session in dictionary.get('sessions')]
             )
         return user
     
