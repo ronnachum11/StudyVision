@@ -51,13 +51,13 @@
                     <div class="navbar-nav">
                         <a class="nav-item nav-link" href="{{ url_for('home', _anchor='about') }}">About</a>
                         <a class="nav-item nav-link" href="{{ url_for('home', _anchor='contact') }}">Contact</a>
-                        <a class="nav-item nav-link" href="{{ url_for('home') }}">Try It Out!</a>
+                        <a class="nav-item nav-link" href="{{ url_for('session') }}">Try It Out!</a>
                     </div>
                 {% else %}
                     <div class="navbar-nav">
                         <a class="nav-item nav-link" href="{{ url_for('home', _anchor='about') }}">About</a>
                         <a class="nav-item nav-link" href="{{ url_for('home', _anchor='contact') }}">Contact</a>
-                        <a class="nav-item nav-link" href="{{ url_for('home') }}">Start a Session</a>
+                        <a class="nav-item nav-link" href="{{ url_for('session') }}">Start a Session</a>
                     </div>
                 {% endif %}
                 <!-- Navbar Right Side -->

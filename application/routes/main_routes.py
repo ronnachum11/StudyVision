@@ -21,6 +21,10 @@ def home():
     print(current_user.is_authenticated)
     return render_template("home.html")
 
+@app.route("/session", methods=["GET", "POST"])
+def session():
+    return render_template("session.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
@@ -51,7 +55,7 @@ def login():
             else:
                 return redirect(url_for('home'))
         else:
-            flash("Login Unsuccsesful. Please check email and password", 'danger')
+            flash("Login Unsuccessful. Please check email and password", 'danger')
     
     return render_template("login.html", form=form)
 
