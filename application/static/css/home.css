@@ -6,28 +6,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 @import url(https://fonts.googleapis.com/css?family=Anonymous+Pro);
 
-body {
-    background: linear-gradient(90deg, rgba(22,0,96,1) 0%, rgba(69,3,187,1) 53%, rgba(76,0,255,1) 100%);
-}
-
 .transition {
     transition: all .2s ease-in-out; 
 }
 
 #name {
-    font-size: 100px
-}
-
-#name:hover {
-    font-size: 105px;
-}
-
-#tagline {
     font-size: 70px
 }
 
-#tagline:hover {
+#name:hover {
     font-size: 75px;
+}
+
+#tagline {
+    font-size: 50px
+}
+
+#tagline:hover {
+    font-size: 55px;
 }
 
 #eye:hover {

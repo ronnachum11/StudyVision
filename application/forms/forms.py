@@ -8,8 +8,14 @@ from wtforms_components import ColorField, TimeField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp, ValidationError
 from application.classes.user import User
 
+class RegistrationForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Sign Up')
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+    submit = SubmitField('Log In')

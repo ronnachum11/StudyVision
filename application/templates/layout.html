@@ -10,7 +10,7 @@
     <!-- Meta tags for link previews -->
 
     <meta property="og:type"               content="website" />
-    <meta property="og:title"              content="MyEye - Online Focus Assistance" />
+    <meta property="og:title"              content="StudyVision - Online Focus Assistance" />
     <meta property="og:description"        content="Helping everyone thrive from home." />
     <!-- <meta property="og:image"              content="./static/images/preview.png" /> -->
 
@@ -23,9 +23,9 @@
     {% block page_styles %}{% endblock page_styles %}
     
     {% if title %}
-        <title>MyEye - {{ title }}</title>
+        <title>StudyVision - {{ title }}</title>
     {% else %}
-        <title>MyEye</title>
+        <title>StudyVision</title>
     {% endif %}
 
     <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo.ico') }}" /> -->
@@ -40,7 +40,7 @@
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: transparent; margin: 10px">
             <a id="logo_title" class="navbar-brand" href="{{ url_for('home', _anchor='home') }}">
                 <!-- <img src=""> -->
-                MyEye
+                StudyVision
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
                 aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,11 +63,11 @@
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav ml-auto">
                     {% if not current_user.is_authenticated %}
-                        <a class="nav-item nav-link" href="{{ url_for('home') }}">Register</a>
-                        <a class="nav-item nav-link" href="{{ url_for('home') }}">Log In</a>
+                        <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                        <a class="nav-item nav-link" href="{{ url_for('login') }}">Log In</a>
                     {% else %}
                         <a class="nav-item nav-link" href="{{ url_for('home') }}">Account</a>
-                        <a class="nav-item nav-link" href="{{ url_for('home') }}">Log Out</a>
+                        <a class="nav-item nav-link" href="{{ url_for('logout') }}">Log Out</a>
                     {% endif %}
                 </div>
             </div>

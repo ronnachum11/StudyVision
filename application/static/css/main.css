@@ -9,6 +9,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  background: linear-gradient(90deg, rgba(22,0,96,1) 0%, rgba(69,3,187,1) 53%, rgba(76,0,255,1) 100%);
+}
+
 .mcontainer {
   margin: 2%;
 }
@@ -185,13 +189,13 @@ footer {
 }
 
 input[type=text], input[type=email], input[type=password], .textareas {
-  background-color: #f2f2f2;
-  color: #333;
-  margin: auto;
+  background-color: transparent;
   border: none;
   border-radius: 0px;
+  border-bottom: 3px solid white;
+  color: rgb(255, 255, 255);
   padding: 15px 15px;
-  height: 45px;
+  height: 50px;
   -webkit-transition: background 0.4s ease-in-out;
   -moz-transition: background 0.4s ease-in-out;
   -ms-transition: background 0.4s ease-in-out;
@@ -200,10 +204,8 @@ input[type=text], input[type=email], input[type=password], .textareas {
 }
 
 input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, .textareas:focus {
-  background-color: #e6e6e6;
-  color: #333;
-  border: none;
-  outline: 0px;
+  background-color: transparent;
+  color: rgb(255, 255, 255);
   box-shadow: none;
 }
 

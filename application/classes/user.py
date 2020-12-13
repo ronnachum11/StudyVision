@@ -7,10 +7,11 @@ from application import app, db
 from application.classes.session import Session
 
 class User(UserMixin):
-    def __init__(self, id:str=None, email:str=None, password:str=None, sessions:str=[]):
+    def __init__(self, id:str=None, email:str=None, password:str=None, _is_active:bool=True, sessions:str=[]):
         self.id = str(id)
         self.email = email
         self.password = password
+        self._is_active = _is_active
         self.sessions = sessions
 
     def __repr__(self):
@@ -33,6 +34,7 @@ class User(UserMixin):
             "id": str(self.id),
             "email": self.email,
             "password": self.password,
+            "_is_active": self._is_active,
             "sessions": [session.to_dict() for session in self.sessions]
         }
         return dictionary
@@ -44,6 +46,7 @@ class User(UserMixin):
         user = User(str(dictionary.get("id")),
                     dictionary.get("email"),
                     dictionary.get("password"),
+                    dictionary.get("_is_active"),
                     [Session.get(session) for session in dictionary.get('sessions')]
             )
         return user
@@ -55,6 +58,10 @@ class User(UserMixin):
     def get_by_id(id: str):
         return User.from_dict(db.users.find_one({"id": str(id)}))
     
+    @staticmethod
+    def get_by_email(email: str):
+        return User.from_dict(db.users.find_one({"email": str(email)}))
+
     def get_session_by_id(self, session_id: str):
         sessions = [session for session in self.sessions if session.id == session_id]
         return sessions[0] if len(sessions) > 0 else None
